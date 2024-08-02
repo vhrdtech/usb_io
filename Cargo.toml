@@ -1,0 +1,9 @@
+[package]
+name = "usb_io"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tracing = "0.1"
+wire_weaver = { path = "../wire_weaver/crates/wire_weaver" }
+wire_weaver_usb = { path = "../wire_weaver_usb" }
