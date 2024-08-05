@@ -12,7 +12,7 @@ use wire_weaver::wire_weaver_api;
     // skip_model_codegen = true
     client = true,
     no_alloc = false,
-    debug_to_file = "target/out.rs",
+    // debug_to_file = "target/out.rs",
 )]
 mod raw_client {
     pub struct Client {
