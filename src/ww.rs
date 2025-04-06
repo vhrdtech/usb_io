@@ -7,6 +7,7 @@ use wire_weaver_usb_host::{
     ConnectionInfo, UsbDeviceFilter, UsbError, usb_worker, wire_weaver_client_server,
 };
 
+#[derive(Clone)]
 pub struct B193Driver<F, E> {
     args_scratch: [u8; 512],
     cmd_tx: mpsc::UnboundedSender<Command<F, E>>,

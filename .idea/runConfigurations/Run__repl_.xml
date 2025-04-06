@@ -3,7 +3,7 @@
     <option name="command" value="run --example repl" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs>
-      <env name="RUST_LOG" value="wire_weaver_usb_host=trace,usb_io=trace" />
+      <env name="RUST_LOG" value="wire_weaver_usb_host=debug,usb_io=debug" />
     </envs>
     <option name="emulateTerminal" value="true" />
     <option name="channel" value="DEFAULT" />
