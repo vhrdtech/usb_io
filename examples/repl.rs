@@ -152,7 +152,7 @@ async fn handle_command_inner(c: Command, d: &mut USBIODriver) -> Result<()> {
             }
             I2cCommand::Read { addr, len } => {
                 let addr = u8::from_str_radix(addr.as_str(), 16)?;
-                let r = d.i2c_read(None, addr, I2cReadKind::Plain, len).await?;
+                let r = d.i2c_read(None, addr, I2cReadKind::Plain, len, 0).await?;
                 match r {
                     Ok(envelope) => {
                         println!("i2c read 0x{:02x}: {:02x?}", addr, envelope.data.as_slice())
@@ -163,7 +163,7 @@ async fn handle_command_inner(c: Command, d: &mut USBIODriver) -> Result<()> {
             I2cCommand::Write { addr, data } => {
                 let addr = u8::from_str_radix(addr.as_str(), 16)?;
                 let data = hex::decode(data)?;
-                let r = d.i2c_write(None, addr, data.clone()).await?;
+                let r = d.i2c_write(None, addr, data.clone(), 0).await?;
                 match r {
                     Ok(_) => println!("i2c write 0x{:02x}: {:02x?} ok", addr, data),
                     Err(e) => println!("i2c write 0x{:02x}: {:?}", addr, style(e).red()),
@@ -184,6 +184,7 @@ async fn handle_command_inner(c: Command, d: &mut USBIODriver) -> Result<()> {
                             write: write_data.clone(),
                         },
                         read_len,
+                        0,
                     )
                     .await?;
                 match r {
