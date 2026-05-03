@@ -3,11 +3,10 @@ use clap::{Parser, Subcommand};
 use clap_repl::reedline::{DefaultPrompt, DefaultPromptSegment, FileBackedHistory};
 use clap_repl::{ClapEditor, ReadCommandOutput};
 use console::style;
-use std::time::Duration;
 use tracing::info;
 use usb_io::{I2cMode, I2cReadKind, USBIODriver};
 use wire_weaver_usb_host::UsbDeviceFilter;
-use wire_weaver_usb_host::wire_weaver_client_server::OnError;
+use wire_weaver_usb_host::wire_weaver_client_server::{OnError, Timeout};
 
 #[derive(Parser)]
 #[command(name = "")] // This name will show up in clap's error messages, so it is important to set it to "".
@@ -132,7 +131,7 @@ async fn handle_command_inner(c: Command, d: &mut USBIODriver) -> Result<()> {
             I2cCommand::Configure => {
                 let r = d
                     .i2c_configure(
-                        None,
+                        Timeout::Default,
                         I2cMode::Master {
                             speed_hz: 400_000,
                             monitor: false,
@@ -143,16 +142,18 @@ async fn handle_command_inner(c: Command, d: &mut USBIODriver) -> Result<()> {
                 println!("i2c configure: {r:?}");
             }
             I2cCommand::Scan => {
-                let r = d.i2c_scan(Some(Duration::from_millis(3000))).await?;
+                let r = d.i2c_scan(Timeout::Millis(3000)).await?;
                 println!("i2c scan: {r:02x?}");
             }
             I2cCommand::Capabilities => {
-                let capabilities = d.i2c_capabilities(None).await?;
+                let capabilities = d.i2c_capabilities(Timeout::Default).await?;
                 println!("{capabilities:?}");
             }
             I2cCommand::Read { addr, len } => {
                 let addr = u8::from_str_radix(addr.as_str(), 16)?;
-                let r = d.i2c_read(None, addr, I2cReadKind::Plain, len, 0).await?;
+                let r = d
+                    .i2c_read(Timeout::Default, addr, I2cReadKind::Plain, len, 0)
+                    .await?;
                 match r {
                     Ok(envelope) => {
                         println!("i2c read 0x{:02x}: {:02x?}", addr, envelope.data.as_slice())
@@ -163,7 +164,7 @@ async fn handle_command_inner(c: Command, d: &mut USBIODriver) -> Result<()> {
             I2cCommand::Write { addr, data } => {
                 let addr = u8::from_str_radix(addr.as_str(), 16)?;
                 let data = hex::decode(data)?;
-                let r = d.i2c_write(None, addr, data.clone(), 0).await?;
+                let r = d.i2c_write(Timeout::Default, addr, data.clone(), 0).await?;
                 match r {
                     Ok(_) => println!("i2c write 0x{:02x}: {:02x?} ok", addr, data),
                     Err(e) => println!("i2c write 0x{:02x}: {:?}", addr, style(e).red()),
@@ -178,7 +179,7 @@ async fn handle_command_inner(c: Command, d: &mut USBIODriver) -> Result<()> {
                 let write_data = hex::decode(write_data)?;
                 let r = d
                     .i2c_read(
-                        None,
+                        Timeout::Default,
                         addr,
                         I2cReadKind::RepeatedStart {
                             write: write_data.clone(),

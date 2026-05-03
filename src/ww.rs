@@ -59,14 +59,13 @@ impl USBIODriver {
 
 #[wire_weaver_api(
     ww = "../vb193_usb_io_fw/ww/b193_usb_io.ww",
-    // api_model = "client_server_v0_1",
     client = true,
     no_alloc = false,
     use_async = true,
     derive = "Debug",
-    debug_to_file = "./target/ww_no_alloc.rs"
+    debug_to_file = "./target/ww_std.rs"
 )]
 pub(crate) mod no_alloc_client {
     use super::B193Driver as Client;
-    use super::wire_weaver_client_server;
+    use wire_weaver_usb_host::wire_weaver_client_server;
 }

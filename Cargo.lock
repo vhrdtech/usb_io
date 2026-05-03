@@ -299,9 +299,9 @@ dependencies = [
 
 [[package]]
 name = "crc"
-version = "3.2.1"
+version = "3.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69e6e4d7b33a94f0991c26729976b10ebde1d34c3ee82408fb536164fa10d636"
+checksum = "9710d3b3739c2e349eb44fe848ad0b7c8cb1e42bd87ee49371df2f7acaf3e675"
 dependencies = [
  "crc-catalog",
 ]
@@ -739,6 +739,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "paste"
+version = "1.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
+
+[[package]]
 name = "pathdiff"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -980,6 +986,9 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 [[package]]
 name = "shrink_wrap"
 version = "0.4.0"
+dependencies = [
+ "paste",
+]
 
 [[package]]
 name = "signal-hook"
@@ -1294,6 +1303,7 @@ dependencies = [
  "tracing-subscriber",
  "wire_weaver",
  "wire_weaver_usb_host",
+ "ww_client_server",
 ]
 
 [[package]]
@@ -1635,6 +1645,7 @@ dependencies = [
  "tokio",
  "tracing",
  "wire_weaver",
+ "ww_client_server",
 ]
 
 [[package]]
@@ -1689,5 +1700,20 @@ dependencies = [
  "crc",
  "shrink_wrap",
  "strum_macros 0.27.1",
+ "wire_weaver",
+]
+
+[[package]]
+name = "ww_client_server"
+version = "0.4.0"
+dependencies = [
+ "wire_weaver",
+ "ww_version",
+]
+
+[[package]]
+name = "ww_version"
+version = "0.1.0"
+dependencies = [
  "wire_weaver",
 ]

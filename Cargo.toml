@@ -7,6 +7,7 @@ edition = "2024"
 tokio = { version = "1", features = ["sync", "net", "rt"] }
 tracing = "0.1"
 wire_weaver = { path = "../wire_weaver/wire_weaver" }
+ww_client_server = { path = "../wire_weaver/ww_client_server" }
 wire_weaver_usb_host = { path = "../wire_weaver/wire_weaver_usb_host" }
 futures-lite = "2.6"
 
